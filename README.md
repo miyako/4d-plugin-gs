@@ -26,7 +26,7 @@
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
 
-**Issue**: When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
+**Issue (fixed)**: When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
 
 ```
 _pthread_tsd_cleanup
@@ -37,7 +37,7 @@ YieldToThread
 SetThreadState
 ```
 
-``pthread`` seems to be used for ``CUPS``; let's disable it.
+``pthread`` seems to be used for ``CUPS``; let's __disable it__.
 
 ## Syntax
 
