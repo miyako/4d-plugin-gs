@@ -11,6 +11,21 @@
 
 <img src="https://cloud.githubusercontent.com/assets/1725068/18940649/21945000-8645-11e6-86ed-4a0f800e5a73.png" width="32" height="32" /> <img src="https://cloud.githubusercontent.com/assets/1725068/18940648/2192ddba-8645-11e6-864d-6d5692d55717.png" width="32" height="32" />
 
+### Build Information
+
+* Notable build flags on Mac
+
+```
+--without-x 
+--disable-threading 
+--without-libidn
+--disable-cups
+```
+
+**Note**: On Mac, need to ``make so`` to build a ``dylib``
+
+https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
+
 ## Syntax
 
 ```
