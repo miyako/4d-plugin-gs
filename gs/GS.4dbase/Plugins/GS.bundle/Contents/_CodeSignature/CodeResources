@@ -100,7 +100,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			q7yZ+04MCr3h2nz9PX05H0GCn78=
+			uNHSF4YQz3d9NtFkqrzmggW2ftg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -120,10 +120,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			zGBUavMfc+zvlmEKEbRWBdpBfpI=
+			fu+cUSP+/C/dR/zLMD3O0q/5L+8=
 			</data>
 			<key>requirement</key>
-			<string>identifier "libgs.9" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y69CWUC25B</string>
+			<string>identifier "libgs.9" and anchor apple generic and certificate leaf[subject.CN] = "Mac Developer: keisuke miyako (4W9UT59D3B)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
 		</dict>
 		<key>QuickLook/Thumbnail.png</key>
 		<dict>
@@ -393,11 +393,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			q7yZ+04MCr3h2nz9PX05H0GCn78=
+			uNHSF4YQz3d9NtFkqrzmggW2ftg=
 			</data>
 			<key>hash2</key>
 			<data>
-			DZP84THkYKBKBE+x1tbYet44w80m5xXfRS3FKnNhtws=
+			UPSw2fDw74+51jdqQ9PqpnBOyyRGFbNBF3+wqRX1kIw=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -472,10 +472,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			eiB19pqNniVGuCXbvC0INUuA8yU=
+			RsxCfB4KLqD3vDkn0lwzoK4bEXc=
 			</data>
 			<key>requirement</key>
-			<string>identifier manifest and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y69CWUC25B</string>
+			<string>identifier manifest and anchor apple generic and certificate leaf[subject.CN] = "Mac Developer: keisuke miyako (4W9UT59D3B)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
 		</dict>
 	</dict>
 	<key>rules</key>
@@ -495,6 +495,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Resources/Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -554,6 +559,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Resources/Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^[^/]+$</key>
 		<dict>
