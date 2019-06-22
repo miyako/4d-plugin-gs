@@ -100,7 +100,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GRt6BfuolbcrR8BUM2d2nKcc6vM=
+			qKm1l7Q6qAOBq5oZGjaX65cKV4M=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -116,11 +116,11 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>MacOS/libgs.9.27.dylib</key>
+		<key>MacOS/libgs.9.21.dylib</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			80uKy7L7gA60xLato264/yph/oA=
+			fu+cUSP+/C/dR/zLMD3O0q/5L+8=
 			</data>
 			<key>requirement</key>
 			<string>identifier "libgs.9" and anchor apple generic and certificate leaf[subject.CN] = "Mac Developer: keisuke miyako (4W9UT59D3B)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
@@ -393,11 +393,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GRt6BfuolbcrR8BUM2d2nKcc6vM=
+			qKm1l7Q6qAOBq5oZGjaX65cKV4M=
 			</data>
 			<key>hash2</key>
 			<data>
-			mdZs6wtB7pmka99n3A2if5OYF+oEk3vjkvqZx3azGwk=
+			bN9daRRLL7NhDscO4KwiKG/ygnSLK+ay8jMaYSgzb0k=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -472,7 +472,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			RsxCfB4KLqD3vDkn0lwzoK4bEXc=
+			+ua4G8qSI/PBOHK4kAU8ZhNtIs4=
 			</data>
 			<key>requirement</key>
 			<string>identifier manifest and anchor apple generic and certificate leaf[subject.CN] = "Mac Developer: keisuke miyako (4W9UT59D3B)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
