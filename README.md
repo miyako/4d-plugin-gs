@@ -26,6 +26,8 @@
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
 
+using ``stdlibc++`` and SDK 10.11 
+
 **Issue (fixed)**: When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
 
 ```
