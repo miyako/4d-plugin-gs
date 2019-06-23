@@ -1,11 +1,1 @@
-{
-    "name": "GS",
-    "id": 20000,
-    "commands": [
-                 {
-                 "theme": "Ghostscript",
-                 "syntax": "GS(&Y):L",
-                 "threadSafe": false
-                 }
-                 ]
-}
+﻿{"name":"GS","id":20000,"commands":[{"theme":"Ghostscript","syntax":"GS(&Y):L"}]}
