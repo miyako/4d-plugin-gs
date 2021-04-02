@@ -23,6 +23,19 @@
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
 
+using brew crashed instantly
+
+```
+0   libsystem_pthread.dylib       	0x00007fff6ef855ad pthread_mutex_lock + 0
+1   libgs.9.53.dylib              	0x000000012994ec41 gp_monitor_enter + 9
+2   libgs.9.53.dylib              	0x0000000129b3dbba gs_lib_ctx_init + 203
+3   libgs.9.53.dylib              	0x0000000129b39d33 gs_malloc_init_with_context + 34
+4   libgs.9.53.dylib              	0x0000000129c3b6b2 psapi_new_instance + 63
+5   com.4D.GS                     	0x000000012983733f GS(PluginBlock*) + 1190
+6   com.4D.GS                     	0x0000000129836e89 PluginMain + 17
+7   com.4D.GS                     	0x0000000129837670 FourDPackex + 60
+```
+
 **Issue (fixed)**: When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
 
 ```
