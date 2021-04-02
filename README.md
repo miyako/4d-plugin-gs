@@ -19,6 +19,12 @@
 --disable-cups
 ```
 
+added
+
+```
+--without-tesseract
+```
+
 **Note**: On Mac, need to ``make so`` to build a ``dylib``
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
