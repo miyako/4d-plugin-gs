@@ -8,7 +8,7 @@
 # 4d-plugin-gs
 4D implementation of [Ghostscript](https://www.ghostscript.com)
 
-### Build Information (old info; now uising brew)
+### Build Information
 
 * Notable build flags on Mac
 
