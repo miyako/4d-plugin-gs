@@ -58,6 +58,13 @@ SetThreadState
 * 9.54
 
 ```
+  C compiler:                         gcc -g -O2 -Wall -W
+  C++ compiler:                       g++ -g -O2
+  Enable runtime linker paths:        no
+  Enable linker symbol versioning:    no
+  Support Microsoft Document Imaging: yes
+  Use win32 IO:                       no
+
  Support for internal codecs:
   CCITT Group 3 & 4 algorithms:       yes
   Macintosh PackBits algorithm:       yes
@@ -70,8 +77,8 @@ SetThreadState
   ZLIB support:                       yes
   libdeflate support:                 no
   Pixar log-format algorithm:         yes
-  JPEG support:                       no
-  Old JPEG support:                   no
+  JPEG support:                       yes
+  Old JPEG support:                   yes
   JPEG 8/12 bit dual mode:            no
   ISO JBIG support:                   no
   LZMA2 support:                      no
