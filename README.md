@@ -23,7 +23,7 @@
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
 
-using brew crashed instantly
+using brew bottle crashed instantly
 
 ```
 0   libsystem_pthread.dylib       	0x00007fff6ef855ad pthread_mutex_lock + 0
