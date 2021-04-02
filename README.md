@@ -55,6 +55,36 @@ SetThreadState
 
 ``pthread`` seems to be used for ``CUPS``; let's __disable it__.
 
+* 9.54
+
+```
+ Support for internal codecs:
+  CCITT Group 3 & 4 algorithms:       yes
+  Macintosh PackBits algorithm:       yes
+  LZW algorithm:                      yes
+  ThunderScan 4-bit RLE algorithm:    yes
+  NeXT 2-bit RLE algorithm:           yes
+  LogLuv high dynamic range encoding: yes
+
+ Support for external codecs:
+  ZLIB support:                       yes
+  libdeflate support:                 no
+  Pixar log-format algorithm:         yes
+  JPEG support:                       no
+  Old JPEG support:                   no
+  JPEG 8/12 bit dual mode:            no
+  ISO JBIG support:                   no
+  LZMA2 support:                      no
+  ZSTD support:                       no
+  WEBP support:                       no
+
+  C++ support:                        yes
+
+  OpenGL support:                     no
+```
+
+* 9.21
+
 ---
 
 ```
