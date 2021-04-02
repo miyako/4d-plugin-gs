@@ -2,11 +2,14 @@
 	"editors": [
 		{
 			"type": "method",
-			"id": 2147483636,
+			"id": 2147483639,
 			"codeDescriptor": {
 				"type": 1,
-				"methodName": "CC"
+				"methodName": "TEST_1"
 			}
+		},
+		{
+			"type": "explorer"
 		}
 	]
 }
