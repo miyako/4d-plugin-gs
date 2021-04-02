@@ -1,0 +1,11 @@
+{
+	"name": "GS",
+	"id": 20000,
+	"commands": [
+		{
+			"theme": "GS",
+			"syntax": "GS(&Y):L",
+			"threadSafe": true
+		}
+	]
+}
