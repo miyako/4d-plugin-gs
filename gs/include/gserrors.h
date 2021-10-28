@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2020 Artifex Software, Inc.
+/* Copyright (C) 2001-2021 Artifex Software, Inc.
    All Rights Reserved.
 
    This software is provided AS-IS with no warranty, either express or
@@ -119,7 +119,10 @@ enum gs_error_type {
  * subclasses should not perform any further action. Currently this is limited
  * to compositor creation.
  */
-    gs_error_handled = -111
+    gs_error_handled = -111,
+
+/* Internal error for the C-based PDF interpreter, to indicate a circular PDF reference */
+  gs_error_circular_reference = -112,
 };
 
 /* We do provide a typedef type for external API use */
