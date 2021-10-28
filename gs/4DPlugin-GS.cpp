@@ -45,7 +45,7 @@ void GS(PA_PluginParameters params) {
 
         Param1.fromParamAtIndex(pParams, 1);
 
-        void *minst;
+        void *minst = NULL;/* must be initialised to NULL, else crash */
         
     #if VERSIONMAC
         std::vector<std::string>_gsargv;
