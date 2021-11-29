@@ -3,7 +3,11 @@
 [![license](https://img.shields.io/github/license/miyako/4d-plugin-gs)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-gs/total)
 
-**Note**: for v17 and earlier, move `manifest.json` to `Contents`
+### Remarks on 9.21 compilation for ARM
+
+* change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.
+* surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
+* include `ftadvanc.h` in `afshaper.c` 
 
 # 4d-plugin-gs
 4D implementation of [Ghostscript](https://www.ghostscript.com)
