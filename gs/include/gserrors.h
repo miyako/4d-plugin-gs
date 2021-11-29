@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2021 Artifex Software, Inc.
+/* Copyright (C) 2001-2012 Artifex Software, Inc.
    All Rights Reserved.
 
    This software is provided AS-IS with no warranty, either express or
@@ -9,8 +9,8 @@
    of the license contained in the file LICENSE in this distribution.
 
    Refer to licensing information at http://www.artifex.com or contact
-   Artifex Software, Inc.,  1305 Grant Avenue - Suite 200, Novato,
-   CA 94945, U.S.A., +1(415)492-9861, for further information.
+   Artifex Software, Inc.,  7 Mt. Lassen Drive - Suite A-134, San Rafael,
+   CA  94903, U.S.A., +1(415)492-9861, for further information.
 */
 
 
@@ -102,12 +102,6 @@ enum gs_error_type {
     gs_error_NeedInput = -106,
 
 /*
- * Internal code to all run_string to request that the data is rerun
- * using run_file.
- */
-    gs_error_NeedFile = -107,
-
-/*
  * Internal code for a normal exit when usage info is displayed.
  * This allows Window versions of Ghostscript to pause until
  * the message can be read.
@@ -119,10 +113,7 @@ enum gs_error_type {
  * subclasses should not perform any further action. Currently this is limited
  * to compositor creation.
  */
-    gs_error_handled = -111,
-
-/* Internal error for the C-based PDF interpreter, to indicate a circular PDF reference */
-  gs_error_circular_reference = -112,
+    gs_error_handled = -111
 };
 
 /* We do provide a typedef type for external API use */
