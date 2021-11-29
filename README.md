@@ -8,6 +8,14 @@
 * change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.
 * surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
 * include `ftadvanc.h` in `afshaper.c` 
+* disable libpng ARM optimisation 
+
+```
+export CFLAGS="-mmacosx-version-min=11.0"
+export CXXFLAGS="-mmacosx-version-min=11.0"
+export CPPFLAGS="-mmacosx-version-min=11.0 -DPNG_ARM_NEON_OPT=0"
+export LDFLAGS="-mmacosx-version-min=11.0"
+```
 
 # 4d-plugin-gs
 4D implementation of [Ghostscript](https://www.ghostscript.com)
