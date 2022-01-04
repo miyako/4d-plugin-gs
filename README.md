@@ -5,11 +5,22 @@
 
 ### Remarks on 9.21 compilation for ARM
 
+* make `pl_print_usage` conditional in `pctop.c`
+
+```c
+/* output the page */
+if (gs_debug_c(':')) {
+#ifdef DEBUG
+    pl_print_usage(pcli->post_page_closure, "parse done :");
+#endif
+}
+```
+
 * ~~change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.~~ depends
 * surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
 * include `ftadvanc.h` in `afshaper.c` 
 * disable libpng ARM optimisation 
-
+_
 ```
 export CFLAGS="-mmacosx-version-min=11.0"
 export CXXFLAGS="-mmacosx-version-min=11.0"
