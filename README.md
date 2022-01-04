@@ -5,7 +5,7 @@
 
 ### Remarks on 9.21 compilation for ARM
 
-* change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.
+* ~~change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.~~ depends
 * surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
 * include `ftadvanc.h` in `afshaper.c` 
 * disable libpng ARM optimisation 
