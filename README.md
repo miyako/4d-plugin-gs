@@ -5,6 +5,7 @@
 
 ### Remarks on 9.21 compilation for ARM
 
+* include `stdlib.h` in `r_strip.c` for `abs()`
 * make `pl_print_usage` conditional in `pctop.c`
 
 ```c
