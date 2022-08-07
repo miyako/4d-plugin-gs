@@ -19,7 +19,7 @@ if (gs_debug_c(':')) {
 
 * ~~change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.~~ depends
 * surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
-* include `ftadvanc.h` in `afshaper.c` 
+* include `../../include/freetype/ftadvanc.h` in `afshaper.c` 
 * disable libpng ARM optimisation 
 _
 ```
