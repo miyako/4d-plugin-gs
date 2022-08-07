@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/miyako/4d-plugin-gs)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-gs/total)
 
-### Remarks on 9.21 compilation for ARM
+### Remarks on [9.21](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs921) compilation for ARM
 
 * include `stdlib.h` in `r_strip.c` for `abs()`
 * make `pl_print_usage` conditional in `pctop.c`
