@@ -43,7 +43,7 @@ export LDFLAGS="-mmacosx-version-min=11.0"
 --disable-cups
 ```
 
-added
+for later versions (not necessary for 9.21)
 
 ```
 --without-tesseract
