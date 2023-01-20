@@ -7,6 +7,7 @@
 
 * the source code of this plugin developed using the [4D Plug-in SDK](https://github.com/4d/4D-Plugin-SDK) is licensed under the [MIT license](https://github.com/miyako/4d-plugin-gs/blob/master/LICENSE).
 * the licensing of **ghostscript** (shared library) [is exclusively handled by Artifex Software, Inc.](https://www.ghostscript.com/licensing/index.html)
+* the licensing of the binary product of this plugin is subject to the licensing of all its dependencies.
 
 ### Remarks on [9.21](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs921) compilation for ARM
 
