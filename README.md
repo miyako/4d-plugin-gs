@@ -2,7 +2,7 @@
 ![platform](https://img.shields.io/static/v1?label=platform&message=mac-intel%20|%20mac-arm%20|%20win-64&color=blue)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-gs/total)
 
-### Dpendencies and Licensing
+### Dependencies and Licensing
 
 * the source code of this plugin developed using the [4D Plug-in SDK](https://github.com/4d/4D-Plugin-SDK) is licensed under the MIT license
 * the licensing of **ghostscript** [is exclusively handled by Artifex Software, Inc.](https://www.ghostscript.com/licensing/index.html)
