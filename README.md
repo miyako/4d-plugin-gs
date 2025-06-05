@@ -21,7 +21,7 @@
 > [!WARNING]
 > homebrew bottles will crash; need to build from source
 
-### ``make so`
+### `make so`
 
 > [!NOTE]
 > option to build `.dylib`
