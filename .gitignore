@@ -1,3 +1,7 @@
 gs/build/*
 gs/test/Project/DerivedData/*
 gs/test/userPreferences.*
+gs/.vs/*
+gs/Objs/*
+gs/test/Plugins/GS.bundle/Contents/Windows64/GS.exp
+gs/test/Plugins/GS.bundle/Contents/Windows64/GS.lib
