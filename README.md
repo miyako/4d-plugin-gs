@@ -9,62 +9,22 @@
 * the licensing of **ghostscript** (shared library) [is exclusively handled by Artifex Software, Inc.](https://www.ghostscript.com/licensing/index.html)
 * the licensing of the binary product of this plugin is subject to the licensing of all its dependencies.
 
-### Remarks on [9.21](https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs921) compilation for ARM
+## Update (June 2025)
 
-* include `stdlib.h` in `r_strip.c` for `abs()`
-* make `pl_print_usage` conditional in `pctop.c`
-
-```c
-/* output the page */
-if (gs_debug_c(':')) {
-#ifdef DEBUG
-    pl_print_usage(pcli->post_page_closure, "parse done :");
-#endif
-}
-```
-
-* ~~change `JERR_HUFF_CLEN_OVERFLOW` to `JERR_HUFF_CLEN_OUTOFBOUNDS` in `jchuff.c`.~~ depends
-* surpress `PNG_ZLIB_VERNUM != ZLIB_VERNUM` in `pngpriv.h`
-* include `../../include/freetype/ftadvanc.h` in `afshaper.c` 
-* disable libpng ARM optimisation 
-_
-```
-export CFLAGS="-mmacosx-version-min=11.0"
-export CXXFLAGS="-mmacosx-version-min=11.0"
-export CPPFLAGS="-mmacosx-version-min=11.0 -DPNG_ARM_NEON_OPT=0"
-export LDFLAGS="-mmacosx-version-min=11.0"
-```
+- [x] `ghostscript-10.05.1`
 
 # 4d-plugin-gs
 4D implementation of [Ghostscript](https://www.ghostscript.com)
 
 ### Build Information
 
-* Notable build flags on Mac
+> [!WARNING]
+> homebrew bottles will crash; need to build from source
 
-```
---without-x 
---disable-threading 
---without-libidn
---disable-cups
-```
+### ``make so`
 
-**Note**: On Mac, need to ``make so`` to build a ``dylib``
-
-https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
-
-using brew bottle crashed instantly
-
-```
-0   libsystem_pthread.dylib       	0x00007fff6ef855ad pthread_mutex_lock + 0
-1   libgs.9.53.dylib              	0x000000012994ec41 gp_monitor_enter + 9
-2   libgs.9.53.dylib              	0x0000000129b3dbba gs_lib_ctx_init + 203
-3   libgs.9.53.dylib              	0x0000000129b39d33 gs_malloc_init_with_context + 34
-4   libgs.9.53.dylib              	0x0000000129c3b6b2 psapi_new_instance + 63
-5   com.4D.GS                     	0x000000012983733f GS(PluginBlock*) + 1190
-6   com.4D.GS                     	0x0000000129836e89 PluginMain + 17
-7   com.4D.GS                     	0x0000000129837670 FourDPackex + 60
-```
+> [!NOTE]
+> option to build `.dylib`
 
 ### `LDFLAGS="-lexpat"`
 
