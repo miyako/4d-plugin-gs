@@ -72,7 +72,16 @@ using brew bottle crashed instantly
 7   com.4D.GS                     	0x0000000129837670 FourDPackex + 60
 ```
 
-**Issue (fixed)**: When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
+### ` --disable-threading --without-tesseract `
+
+> [!NOTE]
+> OCR is excluded. Tesseract OCR relies on threading. 
+
+### `--disable-cups`
+
+> [!WARNING]
+> When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
+> `pthread` seems to be used for `cups`
 
 ```
 _pthread_tsd_cleanup
@@ -82,8 +91,6 @@ TSExit
 YieldToThread
 SetThreadState
 ```
-
-``pthread`` seems to be used for ``CUPS``; let's __disable it__.
 
 ---
 
