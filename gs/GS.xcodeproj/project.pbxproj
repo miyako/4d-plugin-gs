@@ -22,7 +22,7 @@
 		D130064F12F02D9700702C0E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D130064E12F02D9700702C0E /* Cocoa.framework */; };
 		D13116A91A03ACB700DE1322 /* 4DPluginAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = D13116A81A03ACB700DE1322 /* 4DPluginAPI.c */; settings = {COMPILER_FLAGS = "-Wno-multichar"; }; };
 		D134D4AC1A030BA0008D14EF /* manifest.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = D134D4A91A030B06008D14EF /* manifest.json */; };
-		D19C31A027552A63005601ED /* libgs.9.21.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D19C319F27552A63005601ED /* libgs.9.21.dylib */; };
+		D1612CEA2DF25061003EF093 /* libgs.10.05.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D1612CE92DF25061003EF093 /* libgs.10.05.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,6 +68,7 @@
 		D13116A81A03ACB700DE1322 /* 4DPluginAPI.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = 4DPluginAPI.c; sourceTree = "<group>"; };
 		D134D4A91A030B06008D14EF /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
 		D14D10DD1A03A8A5008B3411 /* constants.xlf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = constants.xlf; sourceTree = "<group>"; };
+		D1612CE92DF25061003EF093 /* libgs.10.05.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.10.05.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.10.05.dylib; sourceTree = "<group>"; };
 		D19C319F27552A63005601ED /* libgs.9.21.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.21.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.9.21.dylib; sourceTree = "<group>"; };
 		D1B38520272A53D70019913F /* libgs.9.55.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.55.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.9.55.dylib; sourceTree = "<group>"; };
 		D1CA88F426169F92006EB9E6 /* libgs.9.54.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.54.dylib; path = a/libgs.9.54.dylib; sourceTree = "<group>"; };
@@ -78,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D19C31A027552A63005601ED /* libgs.9.21.dylib in Frameworks */,
+				D1612CEA2DF25061003EF093 /* libgs.10.05.dylib in Frameworks */,
 				D130064F12F02D9700702C0E /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -163,6 +164,7 @@
 		D16FBB3C22A4C07E008F0416 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1612CE92DF25061003EF093 /* libgs.10.05.dylib */,
 				D19C319F27552A63005601ED /* libgs.9.21.dylib */,
 				D1B38520272A53D70019913F /* libgs.9.55.dylib */,
 				D1CA88F426169F92006EB9E6 /* libgs.9.54.dylib */,
@@ -497,6 +499,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OBJROOT = "$(SRCROOT)/build";
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 			};
@@ -543,6 +546,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OBJROOT = "$(SRCROOT)/build";
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 			};
@@ -588,6 +592,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 			};

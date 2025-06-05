@@ -1,0 +1,3 @@
+gs/build/*
+gs/test/Project/DerivedData/*
+gs/test/userPreferences.*

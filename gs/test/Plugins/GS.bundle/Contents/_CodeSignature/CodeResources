@@ -24,14 +24,14 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>MacOS/libgs.9.21.dylib</key>
+		<key>MacOS/libgs.10.05.dylib</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			fn9G/8MKPFFS9axvkP6lQwcOdZM=
+			L1nSxDRowFpFn+dHJRDBGfjPV1I=
 			</data>
 			<key>requirement</key>
-			<string>identifier "libgs.9" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y69CWUC25B</string>
+			<string>cdhash H"2f59d2c43468c05a459fe7472510c119f8cf5752"</string>
 		</dict>
 		<key>QuickLook/Thumbnail.png</key>
 		<dict>
