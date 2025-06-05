@@ -49,12 +49,6 @@ export LDFLAGS="-mmacosx-version-min=11.0"
 --disable-cups
 ```
 
-for later versions (not necessary for 9.21)
-
-```
---without-tesseract
-```
-
 **Note**: On Mac, need to ``make so`` to build a ``dylib``
 
 https://www.ghostscript.com/doc/9.21/Make.htm#Mac_build
@@ -72,15 +66,20 @@ using brew bottle crashed instantly
 7   com.4D.GS                     	0x0000000129837670 FourDPackex + 60
 ```
 
+### `LDFLAGS="-lexpat"`
+
+> [!NOTE]
+> `fontconfig` and `gs` links with `expat`
+ 
 ### ` --disable-threading --without-tesseract `
 
 > [!NOTE]
-> OCR is excluded. Tesseract OCR relies on threading. 
+> OCR is excluded. Tesseract OCR relies on threading
 
 ### `--disable-cups`
 
 > [!WARNING]
-> When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread.
+> When 4D Server.app is quit (not when the structure is closed), the following error is systematically raised in the client manager thread
 > `pthread` seems to be used for `cups`
 
 ```
