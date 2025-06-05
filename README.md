@@ -74,7 +74,7 @@ using brew bottle crashed instantly
 ### ` --disable-threading --without-tesseract `
 
 > [!NOTE]
-> OCR is excluded. Tesseract OCR relies on threading
+> Tesseract OCR relies on threading
 
 ### `--disable-cups`
 
