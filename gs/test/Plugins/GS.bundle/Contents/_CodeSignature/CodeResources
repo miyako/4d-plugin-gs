@@ -8,7 +8,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Y2HpR5LYqgpOW7r+LWO/W5Ftg9Q=
+			/gsQ9WwKD2hIp0j+wUezt6Z1IIA=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -28,10 +28,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			L1nSxDRowFpFn+dHJRDBGfjPV1I=
+			DJ+RSkh/xbIlDLzTMl/EkNf7424=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"2f59d2c43468c05a459fe7472510c119f8cf5752"</string>
+			<string>identifier "libgs.10" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = Y69CWUC25B</string>
 		</dict>
 		<key>QuickLook/Thumbnail.png</key>
 		<dict>
@@ -44,7 +44,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ejvmAsS8RwuQ0INSyNSYJQcGfKRNTtx4s9A42aB+ZYs=
+			Gq57Rp/jN9sS4/aobzPQqBui9Ovz4/bPQwBYgxrSvSc=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -67,14 +67,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RRwz15JVTB3yFsnc3bym5l/dZuISVRdqqLHspwTbO8s=
+			khsYnJjBA9bmV7hVmIc5MkkmchvpuXuC/3OGA6jm0jE=
 			</data>
 		</dict>
 		<key>Windows64/gsdll64.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GwYh0vcJa2TAumdscJO0Ziy/UYuNzhMr3JPj/Aliy74=
+			Z965qwBgUWN/jVwhJ2R7ATB3axlZRl/QlU0MT7PYSOk=
 			</data>
 		</dict>
 	</dict>
