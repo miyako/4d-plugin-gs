@@ -39,22 +39,32 @@ void GS(PA_PluginParameters params) {
 
     sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
     PackagePtr pParams = (PackagePtr)params->fParameters;
-    
+
+    C_LONGINT returnValue;
+    returnValue.setIntValue(-1);
+    /* Default/error value. Covers three paths that previously left returnValue
+       unset (silently reporting 0/"success" to 4D):
+         - an exception thrown anywhere below (caught below, before setReturn)
+         - an empty options array (gsargc == 0)
+         - gsapi_new_instance() failing (e.g. an instance already exists --
+           Ghostscript supports only one instance process-wide, see iapi.h) */
+
+    try
+    {
         ARRAY_TEXT Param1;
-        C_LONGINT returnValue;
 
         Param1.fromParamAtIndex(pParams, 1);
 
         void *minst = NULL;/* must be initialised to NULL, else crash */
-        
+
     #if VERSIONMAC
         std::vector<std::string>_gsargv;
     #else
         std::vector<std::wstring>_gsargv;
     #endif
-        
+
         std::vector<char *>gsargv;
-        
+
         for(unsigned int i = 0;i < Param1.getSize();++i)
         {
     #if VERSIONMAC
@@ -69,30 +79,47 @@ void GS(PA_PluginParameters params) {
             _argv = std::wstring((const wchar_t *)_u16.c_str(), _u16.length());
     #endif
             _gsargv.push_back(_argv);
-            
+
         }
-        
+
         for(unsigned int i = 0;i < Param1.getSize();++i)
         {
             gsargv.push_back((char *)(_gsargv.at(i).c_str()));
         }
-        
-        int gsargc = (int)gsargv.size();
-        
-        if(gsapi_new_instance(&minst, NULL) == 0)
-        {
-    #if VERSIONMAC
-            gsapi_set_arg_encoding(minst, GS_ARG_ENCODING_UTF8);
-    #else
-            gsapi_set_arg_encoding(minst, GS_ARG_ENCODING_UTF16LE);
-    #endif
-            
-            returnValue.setIntValue(gsapi_init_with_args(minst, gsargc, (char **)&gsargv[0]));
 
-            gsapi_exit(minst);//finalises the output
-            gsapi_delete_instance(minst);
+        int gsargc = (int)gsargv.size();
+
+        /* Guard against &gsargv[0]/UB on an empty options array -- calling
+           GS with no arguments is not meaningful, so it's treated as an
+           error rather than passed through to gsapi_init_with_args(). */
+        if(gsargc > 0)
+        {
+            if(gsapi_new_instance(&minst, NULL) == 0)
+            {
+    #if VERSIONMAC
+                gsapi_set_arg_encoding(minst, GS_ARG_ENCODING_UTF8);
+    #else
+                gsapi_set_arg_encoding(minst, GS_ARG_ENCODING_UTF16LE);
+    #endif
+
+                returnValue.setIntValue(gsapi_init_with_args(minst, gsargc, gsargv.data()));
+
+                gsapi_exit(minst);//finalises the output
+                gsapi_delete_instance(minst);
+            }
+            /* else: gsapi_new_instance() failed -- returnValue keeps the
+               -1 default set above instead of silently reporting 0/success. */
         }
-        
-        returnValue.setReturn(pResult);
+    }
+    catch(...)
+    {
+        /* returnValue keeps the -1 default set above. The important part is
+           falling through to setReturn() below on every path, including this
+           one -- without it, 4D would be left waiting for a return value that
+           never arrives (GS is declared with a return type in manifest.json:
+           "GS(&Y):L"), which is a freeze, not just a missed error code. */
+    }
+
+    returnValue.setReturn(pResult);
 }
 
