@@ -3,11 +3,7 @@
 [![license](https://img.shields.io/github/license/miyako/4d-plugin-gs)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-gs/total)
 
-### Dependencies and Licensing
-
-* the source code of this plugin developed using the [4D Plug-in SDK](https://github.com/4d/4D-Plugin-SDK) is licensed under the [MIT license](https://github.com/miyako/4d-plugin-gs/blob/master/LICENSE).
-* the licensing of **ghostscript** (shared library) [is exclusively handled by Artifex Software, Inc.](https://www.ghostscript.com/licensing/index.html)
-* the licensing of the binary product of this plugin is subject to the licensing of all its dependencies.
+# 4d-plugin-gs
 
 `GS` is a thin 4D wrapper around [Ghostscript](https://www.ghostscript.com)'s C API (`gsapi_new_instance` / `gsapi_init_with_args` / `gsapi_exit`). It takes the same command-line switches you'd pass to the `gs` executable — as a 4D text array instead of a shell command line — and drives the bundled Ghostscript library (currently `ghostscript-10.05.1`) to process a PostScript or PDF file: converting formats, rasterizing pages, or running any other operation Ghostscript itself supports.
 
@@ -21,7 +17,7 @@ Command | Returns | Purpose
 
 ## Requirements & platform notes
 
-- **Ghostscript supports exactly one instance per process.** This is Ghostscript's own restriction, not a 4D limitation — its C API uses a static, process-wide instance counter. `manifest.json` currently declares `GS` as `"threadSafe": true`, but if two calls to `GS` genuinely overlap (e.g. two 4D processes/threads calling it at the same moment), the second call's Ghostscript instance creation will fail by design. **Until this is resolved at the plugin level, avoid calling `GS` concurrently from more than one process/thread at a time** — serialize calls if your workflow could otherwise overlap them.
+- **Ghostscript supports exactly one instance per process.** This is Ghostscript's own restriction, not a 4D limitation — its C API uses a static, process-wide instance counter. `manifest.json` declares `GS` as `"threadSafe": true`, and as of the current source the plugin honors that: an internal mutex serializes overlapping calls so a second call made while a first is still running **waits its turn instead of failing.** The practical effect: `GS` is safe to call from multiple threads at once, but two overlapping calls never actually run in parallel — the second one queues behind the first for as long as Ghostscript takes to finish. Plan for that if you're calling `GS` from several concurrent processes on a busy 4D Server.
 - **Always include `-dNOPAUSE`, `-dBATCH`, and `-dQUIET`.** Ghostscript's command-line interpreter is designed for interactive use by default; without `-dNOPAUSE`/`-dBATCH` it can sit waiting for input that 4D has no way to provide, which will look like a hang from your 4D code rather than a clean error. `-dSAFER` is also strongly recommended — it sandboxes file access (see the `-dSAFER` note below).
 - **Do not put a placeholder program name in position 1 of the options array.** Unlike a typical C `main(argc, argv)`, the array passed to `GS` is Ghostscript's *entire* argument list — position 1 should be your first real switch (e.g. `-dNOPAUSE`), exactly as shown in every example below.
 - **`-dSAFER` restricts file access to what you explicitly permit.** If your PostScript/PDF input references other files (fonts, ICC profiles, included scripts), you must add a `--permit-file-read=` (or `--permit-file-write=`) entry for each directory those files live in, or Ghostscript will refuse to read them. See the ZUGFeRD example below.
@@ -42,7 +38,7 @@ error:=GS(options)
 Parameter | Type | Description
 ------------|------------|----
 `options` | ARRAY TEXT | Command-line-style Ghostscript switches, one per array element, in the exact order Ghostscript should see them. Mandatory — must contain at least one element (see note below).
-Result | LONGINT | `0` on success. A negative value is a Ghostscript error code (see `gserrors.h`) or, going forward, `-1` if Ghostscript couldn't even be started for this call (see Description).
+Result | LONGINT | `0` on success. A negative value is a Ghostscript error code (see `gserrors.h`) or, going forward, `-1` if Ghostscript couldn't be started for this call at all (see Description).
 
 ### Description
 
@@ -50,7 +46,7 @@ Result | LONGINT | `0` on success. A negative value is a Ghostscript error code 
 
 Text encoding is handled for you: on macOS the array is passed through as UTF-8; on Windows it's passed through as UTF-16LE. Non-ASCII file paths and arguments work on both platforms without extra handling on your part.
 
-> **Forward-looking note:** an empty `options` array and a failure to start a Ghostscript instance (for example, a second overlapping call while one is already running — see Requirements above) currently have undefined/crash-risk behavior in the shipped binary. Once the plugin is rebuilt from the current source, both cases instead return `-1` immediately without attempting to run Ghostscript. This paragraph describes the *fixed* source's behavior, not necessarily the binary you currently have installed — check your build.
+> **Forward-looking note:** an empty `options` array currently has undefined/crash-risk behavior in older, unpatched binaries. In the current source it instead returns `-1` immediately, without attempting to run Ghostscript. Overlapping calls no longer race against each other at all — the current source serializes them with an internal mutex (see Requirements above) rather than letting a second call's instance creation fail — so a `-1` return specifically due to Ghostscript instance creation failing should now be rare, and if you see one it points at something other than an ordinary concurrent-call race (e.g. a previous call's instance not having been cleanly torn down). This paragraph describes the *fixed* source's behavior, not necessarily the binary you currently have installed — check your build.
 
 ### Example
 
@@ -185,7 +181,7 @@ End if
 - **Ghostscript appears to "hang."** Almost always a missing `-dNOPAUSE`/`-dBATCH` — Ghostscript's interpreter defaults to an interactive mode that waits for stdin input 4D can't supply. Add both switches, as in every example above.
 - **`error` is non-zero.** The value is Ghostscript's own raw return code from `gsapi_init_with_args` (`0` = success). Look it up against Ghostscript's `gserrors.h`/error-code documentation for the specific meaning; this plugin does not translate or re-map it.
 - **A file referenced by your PostScript/PDF script (font, ICC profile, included `.ps` library) fails to read, but the main input/output paths work fine.** You're likely running with `-dSAFER` (recommended) without a matching `--permit-file-read=` entry for that file's directory. See the ZUGFeRD example's three `--permit-file-read=` entries.
-- **Calling `GS` again while a previous call is still running fails or behaves unexpectedly.** Ghostscript allows only one instance per process; despite the plugin manifest marking `GS` as thread-safe, concurrent/overlapping calls are not currently safe at the Ghostscript level. Serialize calls to `GS` until this is addressed in the plugin.
+- **A call to `GS` takes noticeably longer than expected under concurrent load.** Ghostscript allows only one instance per process, so the current source serializes overlapping calls internally — a second call made while a first is still running waits for it to finish rather than running alongside it or failing. This is expected: `GS` is safe to call concurrently, but not parallel.
 - **4D Server raises a `pthread`-related error in the client-manager thread when quitting (not on structure close).** This is a known, documented issue tied to CUPS threading and is unrelated to any specific `GS` call — see the plugin's README for the exact stack trace and the `--disable-cups` build flag used to avoid it.
 - **An empty `options` array, or a call made while another `GS` call is already using Ghostscript's single instance.** In the currently fixed source, this returns `-1` without attempting to run Ghostscript; older/unpatched binaries may crash instead — confirm which source your installed binary was built from if you see a crash rather than a `-1` return in this situation.
 - **OCR-, threading-, or CUPS-dependent Ghostscript devices/options don't work.** This build was compiled with `--without-tesseract`, `--disable-threading`, and `--disable-cups` — those features are unavailable regardless of the switches you pass.

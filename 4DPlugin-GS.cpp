@@ -9,8 +9,17 @@
  # --------------------------------------------------------------------------------*/
 
 #include "4DPlugin-GS.h"
+#include <mutex>
 
 #pragma mark -
+
+/* Ghostscript supports exactly one instance per process (see iapi.h's own
+   warning comments on gsapi_new_instance/gsapi_delete_instance). manifest.json
+   declares GS as threadSafe, so 4D may call it from more than one thread at
+   once; this mutex makes overlapping calls serialize -- one at a time, in
+   whatever order they arrive -- instead of the second gsapi_new_instance()
+   failing outright while the first call's instance is still alive. */
+static std::mutex gGSInstanceMutex;
 
 void PluginMain(PA_long32 selector, PA_PluginParameters params) {
     
@@ -94,6 +103,12 @@ void GS(PA_PluginParameters params) {
            error rather than passed through to gsapi_init_with_args(). */
         if(gsargc > 0)
         {
+            /* Serialize the entire new_instance/init_with_args/exit/delete_instance
+               lifecycle -- Ghostscript's single-instance restriction applies for as
+               long as an instance is alive, not just at creation, so the lock must
+               cover the whole block, not just the gsapi_new_instance() call. */
+            std::lock_guard<std::mutex> gsInstanceLock(gGSInstanceMutex);
+
             if(gsapi_new_instance(&minst, NULL) == 0)
             {
     #if VERSIONMAC
@@ -107,8 +122,11 @@ void GS(PA_PluginParameters params) {
                 gsapi_exit(minst);//finalises the output
                 gsapi_delete_instance(minst);
             }
-            /* else: gsapi_new_instance() failed -- returnValue keeps the
-               -1 default set above instead of silently reporting 0/success. */
+            /* else: gsapi_new_instance() failed despite the lock above -- this
+               would now indicate something other than a same-process race (e.g.
+               a prior call's instance wasn't cleanly deleted) -- returnValue
+               keeps the -1 default set above instead of silently reporting
+               0/success. */
         }
     }
     catch(...)
