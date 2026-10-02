@@ -350,7 +350,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -400,7 +400,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -448,7 +448,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -510,7 +510,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				CURRENT_PROJECT_VERSION = 2.4.3;
 			};
 			name = Development;
@@ -559,7 +559,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				CURRENT_PROJECT_VERSION = 2.4.3;
 			};
 			name = Deployment;
@@ -607,7 +607,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				CURRENT_PROJECT_VERSION = 2.4.3;
 			};
 			name = Default;
