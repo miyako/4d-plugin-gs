@@ -11,19 +11,21 @@ Command | Returns | Purpose
 ------------|------------|----
 [`GS`](#gs) | `LONGINT` | Runs Ghostscript with the given command-line-style options.
 
-**Platforms:** macOS (Intel & Apple Silicon), Windows 64-bit.
+**Platforms:** macOS 15 or later (Intel & Apple Silicon), Windows 64-bit.
 
 ---
 
 ## Requirements & platform notes
 
 - **Ghostscript supports exactly one instance per process.** This is Ghostscript's own restriction, not a 4D limitation — its C API uses a static, process-wide instance counter. `manifest.json` declares `GS` as `"threadSafe": true`, and as of the current source the plugin honors that: an internal mutex serializes overlapping calls so a second call made while a first is still running **waits its turn instead of failing.** The practical effect: `GS` is safe to call from multiple threads at once, but two overlapping calls never actually run in parallel — the second one queues behind the first for as long as Ghostscript takes to finish. Plan for that if you're calling `GS` from several concurrent processes on a busy 4D Server.
-- **Always include `-dNOPAUSE`, `-dBATCH`, and `-dQUIET`.** Ghostscript's command-line interpreter is designed for interactive use by default; without `-dNOPAUSE`/`-dBATCH` it can sit waiting for input that 4D has no way to provide, which will look like a hang from your 4D code rather than a clean error. `-dSAFER` is also strongly recommended — it sandboxes file access (see the `-dSAFER` note below).
-- **Do not put a placeholder program name in position 1 of the options array.** Unlike a typical C `main(argc, argv)`, the array passed to `GS` is Ghostscript's *entire* argument list — position 1 should be your first real switch (e.g. `-dNOPAUSE`), exactly as shown in every example below.
-- **`-dSAFER` restricts file access to what you explicitly permit.** If your PostScript/PDF input references other files (fonts, ICC profiles, included scripts), you must add a `--permit-file-read=` (or `--permit-file-write=`) entry for each directory those files live in, or Ghostscript will refuse to read them. See the ZUGFeRD example below.
+- **Always include `-dNOPAUSE`, `-dBATCH`, and `-dQUIET`.** Ghostscript's command-line interpreter is designed for interactive use by default; without `-dNOPAUSE`/`-dBATCH` it can sit waiting for input that 4D has no way to provide, which will look like a hang from your 4D code rather than a clean error. File access is sandboxed by default (see the safer-mode note below).
+- **macOS 15 or later.** The bundled `libgs.10.05.dylib` is built with a minimum macOS version of 15.0 (both slices), even though the plugin binary itself targets 11.5. On an older macOS the library, and so the plugin, is expected to fail to load.
+- **Start your switches at element 1, not element 0.** `GS` passes the whole array, element 0 included, to Ghostscript. Element 0 lands in the slot of a C program's `argv[0]` (the program name), which Ghostscript ignores. Leave `$args{0}` empty and put your first real switch (e.g. `-dNOPAUSE`) in `$args{1}`, as every example below does. A switch placed in element 0 is silently dropped.
+- **Safer mode is on by default.** Ghostscript 9.50 and later run with `-dSAFER` unless you pass `-dNOSAFER`, so passing `-dSAFER` (as `TEST_1`/`TEST_2` do) is harmless but not required. File access outside the input and output paths is refused: if your PostScript/PDF job reads other files (fonts, ICC profiles, included scripts), add a `--permit-file-read=` (or `--permit-file-write=`) entry for each directory those files live in. See the ZUGFeRD example below.
+- **Ghostscript's messages go to the 4D process's own stdout/stderr.** `GS` installs no output callbacks, so banner text, warnings and error messages are not returned to 4D. Use the result code, and `-dQUIET` to keep the console quiet.
 - **File paths must be POSIX-style**, even on Windows — every sample converts native 4D paths with `Convert path system to POSIX` before adding them to the array.
-- This build was compiled with `--disable-threading`, `--without-tesseract`, and `--disable-cups`. Devices or operations that depend on Ghostscript's threading, embedded Tesseract OCR, or CUPS printing are **not available** in this binary. `--disable-cups` specifically works around a crash 4D Server otherwise raises in its client-manager thread on quit (see the plugin's README for the exact stack trace).
-- Exact non-zero error codes returned by Ghostscript are defined in `gserrors.h` (not included with this plugin's source) — `GS` passes Ghostscript's raw return code straight through, so consult Ghostscript's own error-code documentation for the meaning of a specific non-zero value. `0` always means success.
+- **The two platforms ship different Ghostscript builds.** **On macOS**, `libgs.10.05.dylib` is a custom build without threading, Tesseract OCR or CUPS (the library has no CUPS, OCR or `pthread_create` symbols). CUPS was left out because, with it, 4D Server raised a `pthread_exit` error in its client-manager thread when quitting. **On Windows**, `gsdll64.dll` is Artifex's own 10.05.1 build, which does include the OCR devices (`pdfocr8`, `pdfocr24`, `pdfocr32`, `ocr`, `hocr`). A job that uses those devices works on Windows only.
+- **Error codes** are Ghostscript's own, defined in `include/gserrors.h` in this repository. `GS` passes the return value of `gsapi_init_with_args` through unchanged, except for its own `-1` (see [GS](#gs)).
 
 ---
 
@@ -38,15 +40,28 @@ error:=GS(options)
 Parameter | Type | Description
 ------------|------------|----
 `options` | ARRAY TEXT | Command-line-style Ghostscript switches, one per array element, in the exact order Ghostscript should see them. Mandatory — must contain at least one element (see note below).
-Result | LONGINT | `0` on success. A negative value is a Ghostscript error code (see `gserrors.h`) or, going forward, `-1` if Ghostscript couldn't be started for this call at all (see Description).
+Result | LONGINT | `0` on success. Otherwise a Ghostscript code from `gserrors.h` (`-101` means the job ended with `quit`, which is not an error), or `-1` if Ghostscript was not run at all (see Description).
 
 ### Description
 
 `GS` copies every element of `options` into an argument list and hands it directly to Ghostscript's `gsapi_init_with_args`, exactly as if you'd run `gs <options>` from a shell — nothing is added, reordered, or defaulted on your behalf. That means every switch Ghostscript's command-line reference documents (device selection with `-sDEVICE=`, output path with `-sOutputFile=`, resolution with `-r`, page ranges, etc.) is available by adding the matching element(s) to `options`, in the order Ghostscript expects them.
 
-Text encoding is handled for you: on macOS the array is passed through as UTF-8; on Windows it's passed through as UTF-16LE. Non-ASCII file paths and arguments work on both platforms without extra handling on your part.
+Element 0 of `options` is passed too, as Ghostscript's program-name slot, and is ignored (see Requirements above).
 
-> **Forward-looking note:** an empty `options` array currently has undefined/crash-risk behavior in older, unpatched binaries. In the current source it instead returns `-1` immediately, without attempting to run Ghostscript. Overlapping calls no longer race against each other at all — the current source serializes them with an internal mutex (see Requirements above) rather than letting a second call's instance creation fail — so a `-1` return specifically due to Ghostscript instance creation failing should now be rare, and if you see one it points at something other than an ordinary concurrent-call race (e.g. a previous call's instance not having been cleanly torn down). This paragraph describes the *fixed* source's behavior, not necessarily the binary you currently have installed — check your build.
+Text encoding is handled for you: **on macOS** the array is passed as UTF-8, **on Windows** as UTF-16LE. Non-ASCII file paths and arguments work on both platforms without extra handling.
+
+After the job, `GS` always calls `gsapi_exit` (which finishes writing the output file) and deletes the Ghostscript instance. The result is the code from `gsapi_init_with_args` only: an error reported by `gsapi_exit` itself is not returned.
+
+Result codes you are likely to see:
+
+Value | Meaning
+------------|----
+`0` | Success.
+`-100` | Fatal error (`gs_error_Fatal`), e.g. the input file does not exist or cannot be read.
+`-101` | The job ended with `quit` (`gs_error_Quit`), e.g. `-c quit`. Not an error.
+`-1` | Ghostscript was not run: `options` had no element after element 0, or is not a text array, or a Ghostscript instance could not be created, or an exception was caught. Ghostscript's own `gs_error_unknownerror` is also `-1`, so the two cannot be told apart.
+
+> Changed after 2.4.6 (current source, not in a release yet): an empty `options` array returns `-1` without running Ghostscript. Earlier builds passed it on, and Ghostscript then ran with no arguments, printed its banner and returned `0`.
 
 ### Example
 
@@ -178,13 +193,17 @@ End if
 
 ## Error handling & troubleshooting
 
-- **Ghostscript appears to "hang."** Almost always a missing `-dNOPAUSE`/`-dBATCH` — Ghostscript's interpreter defaults to an interactive mode that waits for stdin input 4D can't supply. Add both switches, as in every example above.
-- **`error` is non-zero.** The value is Ghostscript's own raw return code from `gsapi_init_with_args` (`0` = success). Look it up against Ghostscript's `gserrors.h`/error-code documentation for the specific meaning; this plugin does not translate or re-map it.
-- **A file referenced by your PostScript/PDF script (font, ICC profile, included `.ps` library) fails to read, but the main input/output paths work fine.** You're likely running with `-dSAFER` (recommended) without a matching `--permit-file-read=` entry for that file's directory. See the ZUGFeRD example's three `--permit-file-read=` entries.
+- **Ghostscript appears to "hang."** Almost always a missing `-dNOPAUSE`/`-dBATCH` (or `-o`, which implies both). Without them Ghostscript stops after each page with "press <return> to continue" and reads stdin. Whether that blocks depends on how 4D was started; add both switches, as in every example above.
+- **The first switch seems to be ignored.** It is probably in element 0 of the array, which Ghostscript treats as the program name. Start at `$args{1}`.
+- **`error` is non-zero.** The value is Ghostscript's own return code from `gsapi_init_with_args`, defined in `include/gserrors.h`; the plugin does not translate it. `-101` (`quit`) is not an error. Ghostscript's own messages go to the 4D process's stdout/stderr, not to 4D.
+- **`error` is `-1`.** Either Ghostscript was not run (no switches after element 0, wrong array type, instance creation failed) or Ghostscript reported `gs_error_unknownerror`. Check that you pass a filled `ARRAY TEXT`.
+- **A file referenced by your PostScript/PDF script (font, ICC profile, included `.ps` library) fails to read, but the main input/output paths work fine.** Safer mode (the default) needs a `--permit-file-read=` entry for that file's directory. See the ZUGFeRD example's three `--permit-file-read=` entries.
+- **`error` is `0` but the output file is incomplete.** Errors raised while Ghostscript finishes writing the output (`gsapi_exit`) are not reported. Check the output file.
 - **A call to `GS` takes noticeably longer than expected under concurrent load.** Ghostscript allows only one instance per process, so the current source serializes overlapping calls internally — a second call made while a first is still running waits for it to finish rather than running alongside it or failing. This is expected: `GS` is safe to call concurrently, but not parallel.
-- **4D Server raises a `pthread`-related error in the client-manager thread when quitting (not on structure close).** This is a known, documented issue tied to CUPS threading and is unrelated to any specific `GS` call — see the plugin's README for the exact stack trace and the `--disable-cups` build flag used to avoid it.
-- **An empty `options` array, or a call made while another `GS` call is already using Ghostscript's single instance.** In the currently fixed source, this returns `-1` without attempting to run Ghostscript; older/unpatched binaries may crash instead — confirm which source your installed binary was built from if you see a crash rather than a `-1` return in this situation.
-- **OCR-, threading-, or CUPS-dependent Ghostscript devices/options don't work.** This build was compiled with `--without-tesseract`, `--disable-threading`, and `--disable-cups` — those features are unavailable regardless of the switches you pass.
+- **4D Server raises a `pthread_exit` error in the client-manager thread when quitting (not on structure close).** This was seen with a macOS Ghostscript build that included CUPS; the bundled macOS library is built without CUPS to avoid it.
+- **An empty `options` array returns `-1`** in the current source. Older binaries ran Ghostscript with no arguments and returned `0`.
+- **OCR devices (`pdfocr8`, `ocr`, `hocr`, …) fail on macOS but work on Windows.** The macOS library is built without Tesseract; the Windows DLL is Artifex's standard build.
+- **The plugin does not load on macOS 14 or earlier.** The bundled `libgs.10.05.dylib` requires macOS 15.0.
 
 ---
 
