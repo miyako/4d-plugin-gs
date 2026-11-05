@@ -54,7 +54,9 @@ void GS(PA_PluginParameters params) {
     /* Default/error value. Covers three paths that previously left returnValue
        unset (silently reporting 0/"success" to 4D):
          - an exception thrown anywhere below (caught below, before setReturn)
-         - an empty options array (gsargc == 0)
+         - an empty options array (gsargc <= 1: the array always
+           carries element 0, which Ghostscript treats as argv[0], the
+           program name, and ignores)
          - gsapi_new_instance() failing (e.g. an instance already exists --
            Ghostscript supports only one instance process-wide, see iapi.h) */
 
@@ -98,10 +100,13 @@ void GS(PA_PluginParameters params) {
 
         int gsargc = (int)gsargv.size();
 
-        /* Guard against &gsargv[0]/UB on an empty options array -- calling
-           GS with no arguments is not meaningful, so it's treated as an
+        /* gsargv[0] is element 0 of the 4D array, which Ghostscript ignores as
+           the program name. With no element after it (an empty 4D array, or
+           not a text array at all) Ghostscript would start its interactive
+           prompt and read stdin, which can block if 4D has a terminal as
+           stdin. Calling GS with no arguments is not meaningful, so it is an
            error rather than passed through to gsapi_init_with_args(). */
-        if(gsargc > 0)
+        if(gsargc > 1)
         {
             /* Serialize the entire new_instance/init_with_args/exit/delete_instance
                lifecycle -- Ghostscript's single-instance restriction applies for as
