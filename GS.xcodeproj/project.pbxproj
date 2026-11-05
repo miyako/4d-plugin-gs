@@ -64,16 +64,12 @@
 		D10A74FC246E92D000BBEFA6 /* ARRAY_TEXT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARRAY_TEXT.h; path = "4D Plugin API/Classes/ARRAY_TEXT.h"; sourceTree = "<group>"; };
 		D10A74FF246E92D900BBEFA6 /* C_LONGINT.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = C_LONGINT.cpp; path = "4D Plugin API/Classes/C_LONGINT.cpp"; sourceTree = "<group>"; };
 		D10A7500246E92D900BBEFA6 /* C_LONGINT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = C_LONGINT.h; path = "4D Plugin API/Classes/C_LONGINT.h"; sourceTree = "<group>"; };
-		D10A7507246ECE4B00BBEFA6 /* libgs.9.21.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.21.dylib; path = lib/libgs.9.21.dylib; sourceTree = "<group>"; };
 		D120937E13534DCC00A72CAA /* 4DPlugin-GS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "4DPlugin-GS.h"; sourceTree = "<group>"; };
 		D130064E12F02D9700702C0E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		D13116A81A03ACB700DE1322 /* 4DPluginAPI.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = 4DPluginAPI.c; sourceTree = "<group>"; };
 		D134D4A91A030B06008D14EF /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
 		D14D10DD1A03A8A5008B3411 /* constants.xlf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = constants.xlf; sourceTree = "<group>"; };
 		D1612CE92DF25061003EF093 /* libgs.10.05.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.10.05.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.10.05.dylib; sourceTree = "<group>"; };
-		D19C319F27552A63005601ED /* libgs.9.21.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.21.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.9.21.dylib; sourceTree = "<group>"; };
-		D1B38520272A53D70019913F /* libgs.9.55.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.55.dylib; path = test/Plugins/GS.bundle/Contents/MacOS/libgs.9.55.dylib; sourceTree = "<group>"; };
-		D1CA88F426169F92006EB9E6 /* libgs.9.54.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgs.9.54.dylib; path = a/libgs.9.54.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,10 +163,6 @@
 			isa = PBXGroup;
 			children = (
 				D1612CE92DF25061003EF093 /* libgs.10.05.dylib */,
-				D19C319F27552A63005601ED /* libgs.9.21.dylib */,
-				D1B38520272A53D70019913F /* libgs.9.55.dylib */,
-				D1CA88F426169F92006EB9E6 /* libgs.9.54.dylib */,
-				D10A7507246ECE4B00BBEFA6 /* libgs.9.21.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -327,7 +319,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 				DEBUGGING_SYMBOLS = YES;
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = Y69CWUC25B;
@@ -380,7 +372,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = Y69CWUC25B;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -429,7 +421,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = Y69CWUC25B;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -470,7 +462,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -505,13 +496,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				OBJROOT = "$(SRCROOT)/build";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 				MARKETING_VERSION = 2.4.6;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 			};
 			name = Development;
 		};
@@ -519,7 +510,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -554,13 +544,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				OBJROOT = "$(SRCROOT)/build";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 				MARKETING_VERSION = 2.4.6;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 			};
 			name = Deployment;
 		};
@@ -568,7 +558,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -603,12 +592,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/test/Plugins/GS.bundle/Contents/MacOS\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				OBJROOT = "$(SRCROOT)/build";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 				MARKETING_VERSION = 2.4.6;
-				CURRENT_PROJECT_VERSION = 2.4.3;
+				CURRENT_PROJECT_VERSION = 2.4.6;
 			};
 			name = Default;
 		};

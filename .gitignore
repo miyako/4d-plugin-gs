@@ -1,10 +1,26 @@
-gs/build/*
-gs/test/Project/DerivedData/*
-gs/test/userPreferences.*
-gs/.vs/*
-gs/Objs/*
-gs/test/Plugins/GS.bundle/Contents/Windows64/GS.exp
-gs/test/Plugins/GS.bundle/Contents/Windows64/GS.lib
+.DS_Store
+build/
+.vs/
+Objs/
 CLI/*
-gs/test/userPreferences.*
-build/*
+
+# release outputs of the Deployment Run Script phase / CI
+/GS.dmg
+/GS.zip
+
+# 4D test database noise
+test/Logs/
+test/Project/DerivedData/
+test/userPreferences.*
+test/Data/Logs/
+
+# built by Xcode / msbuild (CI rebuilds them); keep libgs.10.05.dylib and gsdll64.dll tracked
+test/Plugins/GS.bundle/Contents/MacOS/GS
+test/Plugins/GS.bundle/Contents/_CodeSignature/
+test/Plugins/Default/
+test/Plugins/GS.build/
+test/Plugins/GS.bundle/Contents/Windows64/GS.exp
+test/Plugins/GS.bundle/Contents/Windows64/GS.lib
+test/Plugins/GS.bundle/Contents/Windows64/GS.iobj
+test/Plugins/GS.bundle/Contents/Windows64/GS.ipdb
+test/Plugins/GS.bundle/Contents/Windows64/GS.pdb
