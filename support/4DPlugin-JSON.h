@@ -106,6 +106,8 @@ bool ob_is_defined(PA_ObjectRef obj, const wchar_t *_key);
 bool ob_get_a(PA_ObjectRef obj, const wchar_t *_key, CUTF8String *value);
 bool ob_get_b(PA_ObjectRef obj, const wchar_t *_key);
 double ob_get_n(PA_ObjectRef obj, const wchar_t *_key);
+// ob_get_c/ob_get_o return an owned reference (or NULL): the caller must
+// release it, e.g. with PA_DisposeObject or a PA_ClearVariable'd variable.
 PA_CollectionRef ob_get_c(PA_ObjectRef obj, const wchar_t *_key);
 // Object getter: mirrors ob_get_c below (eVK_Collection -> PA_GetCollectionVariable)
 // but for eVK_Object -> PA_GetObjectVariable. Did not exist in this header at all;

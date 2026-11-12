@@ -226,3 +226,7 @@ If ($error#0)
    //non-zero = Ghostscript error code; see gserrors.h
 End if
 ```
+
+## Development
+
+`tests/ownership/` holds an ASan/UBSan harness for the 4D native ownership rules (strings, arrays, objects). The **Ownership regressions** workflow runs it on pull requests. See [tests/ownership/README.md](tests/ownership/README.md).
