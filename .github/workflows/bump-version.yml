@@ -4,7 +4,10 @@
 #   2. compute the bumped X.Y.Z
 #   3. force-write that exact string into every version field (pbxproj's
 #      MARKETING_VERSION/CURRENT_PROJECT_VERSION AND Info.plist's
-#      CFBundleShortVersionString/CFBundleVersion)
+#      CFBundleShortVersionString/CFBundleVersion) AND every localized
+#      <lang>.lproj/InfoPlist.strings (Finder shows the localized
+#      CFBundleShortVersionString/CFBundleGetInfoString in preference to
+#      Info.plist, so a stale copy there makes Finder report an old version)
 #   4. commit, then tag "vX.Y.Z" from that same string
 # Step 3 pattern-matches each key rather than matching the old literal
 # value, so a field that already drifted out of sync gets pulled back
@@ -67,6 +70,17 @@ jobs:
 
           PLIST_VERSION=$(python3 -c "import plistlib, os; d = plistlib.load(open(os.environ['INFO_PLIST'], 'rb')); print(d.get('CFBundleShortVersionString', ''))")
 
+          # Localized InfoPlist.strings override Info.plist in Finder, so they
+          # take part in the drift check too (both the short-version key and
+          # the "version X.Y.Z" inside CFBundleGetInfoString).
+          STRINGS_VERSIONS=""
+          while IFS= read -r f; do
+            [ -n "$f" ] || continue
+            V=$(grep -aoE 'CFBundleShortVersionString *= *"[^"]*"' "$f" | sed -E 's/.*"([^"]*)"/\1/' || true)
+            G=$(grep -aoE 'CFBundleGetInfoString *= *"[^"]*"' "$f" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+            STRINGS_VERSIONS="${STRINGS_VERSIONS}${V:+$V$'\n'}${G:+$G$'\n'}"
+          done < <(git ls-files '*.lproj/InfoPlist.strings')
+
           # Info.plist may reference the pbxproj value via an Xcode build
           # variable, e.g. "$(MARKETING_VERSION)", which Xcode substitutes
           # automatically when it copies the plist into the built bundle.
@@ -83,15 +97,16 @@ jobs:
           esac
 
           if [ "$PLIST_IS_VARIABLE" = true ]; then
-            UNIQUE=$(printf '%s\n' "$VALUES" | sort -u)
+            UNIQUE=$(printf '%s\n%s' "$VALUES" "$STRINGS_VERSIONS" | grep . | sort -u)
           else
-            UNIQUE=$(printf '%s\n%s\n' "$VALUES" "$PLIST_VERSION" | sort -u)
+            UNIQUE=$(printf '%s\n%s\n%s' "$VALUES" "$PLIST_VERSION" "$STRINGS_VERSIONS" | grep . | sort -u)
           fi
           COUNT=$(printf '%s\n' "$UNIQUE" | grep -c .)
           if [ "$COUNT" -ne 1 ]; then
             echo "Version fields have already drifted out of sync - fix manually before bumping:" >&2
             echo "  ${PBXPROJ} (${KEY}): $(printf '%s' "$VALUES" | tr '\n' ' ')" >&2
             echo "  ${INFO_PLIST} (CFBundleShortVersionString): ${PLIST_VERSION}" >&2
+            echo "  InfoPlist.strings: $(printf '%s' "$STRINGS_VERSIONS" | tr '\n' ' ')" >&2
             exit 1
           fi
 
@@ -130,12 +145,27 @@ jobs:
             NEW="$NEW" python3 -c "import plistlib, os; path = os.environ['INFO_PLIST']; d = plistlib.load(open(path, 'rb')); new = os.environ['NEW']; d['CFBundleShortVersionString'] = new; d.update({'CFBundleVersion': new} if 'CFBundleVersion' in d else {}); plistlib.dump(d, open(path, 'wb'))"
           fi
 
+          # Localized InfoPlist.strings: force the same version into every copy
+          # (source and committed bundle copies). Keys are matched by name.
+          STRINGS_CHANGED=()
+          while IFS= read -r f; do
+            [ -n "$f" ] || continue
+            sed -i -E \
+              -e "s/(CFBundleShortVersionString *= *\")[^\"]*(\")/\1${NEW}\2/g" \
+              -e "/CFBundleGetInfoString/ s/([Vv]ersion )[0-9]+\.[0-9]+\.[0-9]+/\1${NEW}/g" \
+              "$f"
+            STRINGS_CHANGED+=("$f")
+          done < <(git ls-files '*.lproj/InfoPlist.strings')
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if [ "$PLIST_IS_VARIABLE" = "true" ]; then
             git add "$PBXPROJ"
           else
             git add "$PBXPROJ" "$INFO_PLIST"
+          fi
+          if [ "${#STRINGS_CHANGED[@]}" -gt 0 ]; then
+            git add "${STRINGS_CHANGED[@]}"
           fi
           git commit -m "chore: bump version to ${NEW}"
           git tag "v${NEW}"

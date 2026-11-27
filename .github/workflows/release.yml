@@ -293,6 +293,34 @@ jobs:
             exit 1
           fi
 
+      # Finder prefers the localized InfoPlist.strings over Info.plist, so a
+      # stale value there shows the wrong version. Fail the release unless
+      # every version string in the built bundle equals the tag.
+      - name: verify bundle version matches tag
+        run: |
+          set -euo pipefail
+          EXPECTED="${{ needs.version.outputs.version }}"
+          CONTENTS="${{ env.BASE_DIR }}/Plugins/${{ env.PRODUCT_NAME }}.bundle/Contents"
+          FAIL=0
+          check() { # label actual
+            if [ "$2" != "$EXPECTED" ]; then
+              echo "::error::$1 is '$2', expected '$EXPECTED'"
+              FAIL=1
+            else
+              echo "ok: $1 = $2"
+            fi
+          }
+          check "Info.plist CFBundleShortVersionString" \
+            "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$CONTENTS/Info.plist")"
+          for f in "$CONTENTS"/Resources/*.lproj/InfoPlist.strings; do
+            [ -e "$f" ] || continue
+            V=$(grep -aoE 'CFBundleShortVersionString *= *"[^"]*"' "$f" | sed -E 's/.*"([^"]*)"/\1/' || true)
+            [ -z "$V" ] || check "$f CFBundleShortVersionString" "$V"
+            G=$(grep -aoE 'CFBundleGetInfoString *= *"[^"]*"' "$f" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+            [ -z "$G" ] || check "$f CFBundleGetInfoString" "$G"
+          done
+          exit $FAIL
+
       - name: merge Windows binaries into the bundle
         run: |
           set -euo pipefail
