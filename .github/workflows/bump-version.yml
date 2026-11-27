@@ -73,13 +73,7 @@ jobs:
           # Localized InfoPlist.strings override Info.plist in Finder, so they
           # take part in the drift check too (both the short-version key and
           # the "version X.Y.Z" inside CFBundleGetInfoString).
-          STRINGS_VERSIONS=""
-          while IFS= read -r f; do
-            [ -n "$f" ] || continue
-            V=$(grep -aoE 'CFBundleShortVersionString *= *"[^"]*"' "$f" | sed -E 's/.*"([^"]*)"/\1/' || true)
-            G=$(grep -aoE 'CFBundleGetInfoString *= *"[^"]*"' "$f" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
-            STRINGS_VERSIONS="${STRINGS_VERSIONS}${V:+$V$'\n'}${G:+$G$'\n'}"
-          done < <(git ls-files '*.lproj/InfoPlist.strings')
+          STRINGS_VERSIONS=$(git ls-files '*.lproj/InfoPlist.strings' | xargs -r python3 .github/scripts/infoplist_strings.py read)
 
           # Info.plist may reference the pbxproj value via an Xcode build
           # variable, e.g. "$(MARKETING_VERSION)", which Xcode substitutes
@@ -150,10 +144,7 @@ jobs:
           STRINGS_CHANGED=()
           while IFS= read -r f; do
             [ -n "$f" ] || continue
-            sed -i -E \
-              -e "s/(CFBundleShortVersionString *= *\")[^\"]*(\")/\1${NEW}\2/g" \
-              -e "/CFBundleGetInfoString/ s/([Vv]ersion )[0-9]+\.[0-9]+\.[0-9]+/\1${NEW}/g" \
-              "$f"
+            python3 .github/scripts/infoplist_strings.py write "$NEW" "$f"
             STRINGS_CHANGED+=("$f")
           done < <(git ls-files '*.lproj/InfoPlist.strings')
 

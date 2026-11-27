@@ -314,10 +314,9 @@ jobs:
             "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$CONTENTS/Info.plist")"
           for f in "$CONTENTS"/Resources/*.lproj/InfoPlist.strings; do
             [ -e "$f" ] || continue
-            V=$(grep -aoE 'CFBundleShortVersionString *= *"[^"]*"' "$f" | sed -E 's/.*"([^"]*)"/\1/' || true)
-            [ -z "$V" ] || check "$f CFBundleShortVersionString" "$V"
-            G=$(grep -aoE 'CFBundleGetInfoString *= *"[^"]*"' "$f" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
-            [ -z "$G" ] || check "$f CFBundleGetInfoString" "$G"
+            for v in $(python3 .github/scripts/infoplist_strings.py read "$f"); do
+              check "$f" "$v"
+            done
           done
           exit $FAIL
 
